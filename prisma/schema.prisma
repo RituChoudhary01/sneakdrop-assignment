@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  totalStock  Int
+  priceCents  Int
+
+  saleOpensAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  holds    Hold[]
+  orders   Order[]
+  waitlist WaitlistEntry[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  holds    Hold[]
+  orders   Order[]
+  waitlist WaitlistEntry[]
+}
+
+model Hold {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  productId Int
+
+  status    HoldStatus @default(ACTIVE)
+  source    HoldSource @default(BUY)
+
+  expiresAt DateTime @db.Timestamptz(3)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orders  Order[]
+
+  @@index([productId, status, expiresAt])
+  @@index([userId, productId, status])
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  holdId      Int
+  userId      Int
+  productId   Int
+
+  amountCents Int
+  status      OrderStatus @default(PENDING)
+
+  paidAt       DateTime?     @db.Timestamptz(3)
+  refundStatus RefundStatus?
+  refundReason String?
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  hold    Hold          @relation(fields: [holdId], references: [id], onDelete: Restrict)
+  user    User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  product Product       @relation(fields: [productId], references: [id], onDelete: Restrict)
+  events  PaymentEvent[]
+
+  @@index([holdId])
+  @@index([productId, status])
+  @@index([userId, productId, status])
+  @@index([refundStatus])
+}
+
+model WaitlistEntry {
+  id        Int            @id @default(autoincrement())
+  userId    Int
+  productId Int
+  status    WaitlistStatus @default(WAITING)
+
+  createdAt  DateTime  @default(now()) @db.Timestamptz(3)
+  resolvedAt DateTime? @db.Timestamptz(3)
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, status, createdAt, id])
+}
+
+model PaymentEvent {
+  id                Int                  @id @default(autoincrement())
+  eventId           String               @unique
+  orderId           Int
+
+  type              PaymentEventType
+  providerCreatedAt DateTime             @db.Timestamptz(3)
+
+  outcome    PaymentEventOutcome?
+  receivedAt DateTime @default(now()) @db.Timestamptz(3)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  @@index([orderId, providerCreatedAt])
+}
+
+enum HoldStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  RELEASED
+}
+
+enum HoldSource {
+  BUY
+  WAITLIST
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum RefundStatus {
+  REQUESTED
+  DONE
+}
+
+enum WaitlistStatus {
+  WAITING
+  ASSIGNED
+  CANCELLED
+  SKIPPED
+}
+
+enum PaymentEventType {
+  PENDING
+  SUCCEEDED
+  FAILED
+}
+
+enum PaymentEventOutcome {
+  APPLIED
+  APPLIED_REVIVED
+  IGNORED_DUPLICATE
+  IGNORED_STALE
+  IGNORED_CONFLICT
+  REFUND_REQUIRED
+}

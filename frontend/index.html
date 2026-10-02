@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Sneaker Drop</title>
+
+  <link
+    rel="stylesheet"
+    href="./style.css"
+  />
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="header">
+
+      <div>
+        <p class="eyebrow">
+          LIMITED DROP
+        </p>
+
+        <h1>Sneaker Drop</h1>
+
+        <p class="subtitle">
+          Only 20 pairs available.
+          First come, first served.
+        </p>
+      </div>
+
+      <div class="live-badge">
+        <span class="dot"></span>
+        LIVE
+      </div>
+
+    </header>
+
+
+    <section class="product-card">
+
+      <div class="shoe-image">
+        👟
+      </div>
+
+      <div class="product-info">
+
+        <p class="label">
+          LIMITED EDITION
+        </p>
+
+        <h2>
+          Limited Edition Sneaker
+        </h2>
+
+        <p class="description">
+          Secure your pair before the
+          5-minute hold expires.
+        </p>
+
+        <div class="price">
+          ₹100
+        </div>
+
+        <div class="stock-box">
+          <span>Pairs left</span>
+
+          <strong id="pairsLeft">
+            -
+          </strong>
+        </div>
+
+
+        <!-- USER SELECTION -->
+
+        <div class="user-section">
+
+          <label for="userId">
+            User
+          </label>
+
+          <select id="userId">
+
+            <option value="21">
+              User 21
+            </option>
+
+            <option value="22">
+              User 22
+            </option>
+
+            <option value="23">
+              User 23
+            </option>
+
+            <option value="24">
+              User 24
+            </option>
+
+            <option value="25">
+              User 25
+            </option>
+
+            <option value="26">
+              User 26
+            </option>
+
+            <option value="27">
+              User 27
+            </option>
+
+            <option value="28">
+              User 28
+            </option>
+
+            <option value="29">
+              User 29
+            </option>
+
+            <option value="30">
+              User 30
+            </option>
+
+            <option value="31">
+              User 31
+            </option>
+
+            <option value="32">
+              User 32
+            </option>
+
+            <option value="33">
+              User 33
+            </option>
+
+            <option value="34">
+              User 34
+            </option>
+
+            <option value="35">
+              User 35
+            </option>
+
+            <option value="36">
+              User 36
+            </option>
+
+            <option value="37">
+              User 37
+            </option>
+
+            <option value="38">
+              User 38
+            </option>
+
+            <option value="39">
+              User 39
+            </option>
+
+            <option value="40">
+              User 40
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- BUY -->
+
+        <button
+          id="buyButton"
+          class="buy-button"
+        >
+          Buy Now
+        </button>
+
+
+        <!-- PAYMENT -->
+
+        <button
+          id="payButton"
+          class="pay-button hidden"
+        >
+          Complete Payment
+        </button>
+
+
+        <div
+          id="paymentActions"
+          class="payment-actions hidden"
+        >
+
+          <p class="payment-label">
+            Fake Payment
+          </p>
+
+          <button
+            id="successPaymentButton"
+            class="pay-button"
+          >
+            ✓ Payment Success
+          </button>
+
+          <button
+            id="failedPaymentButton"
+            class="pay-button"
+          >
+            ✕ Payment Failed
+          </button>
+
+          <button
+            id="pendingPaymentButton"
+            class="pay-button"
+          >
+            ◷ Payment Pending
+          </button>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <p
+          id="message"
+          class="message"
+        ></p>
+
+      </div>
+
+    </section>
+
+
+    <!-- STATUS -->
+
+    <section class="status-grid">
+
+      <div class="status-card">
+
+        <span class="status-label">
+          Your Purchases
+        </span>
+
+        <strong id="purchasedCount">
+          0
+        </strong>
+
+      </div>
+
+
+      <div class="status-card">
+
+        <span class="status-label">
+          Hold Status
+        </span>
+
+        <strong id="holdStatus">
+          None
+        </strong>
+
+      </div>
+
+
+      <div class="status-card">
+
+        <span class="status-label">
+          Hold Time
+        </span>
+
+        <strong id="countdown">
+          --:--
+        </strong>
+
+      </div>
+
+
+      <div class="status-card">
+
+        <span class="status-label">
+          Waitlist
+        </span>
+
+        <strong id="waitlistPosition">
+          -
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- HOLD -->
+
+    <section
+      id="holdCard"
+      class="info-card hidden"
+    >
+
+      <div>
+
+        <span class="info-title">
+          Pair Reserved
+        </span>
+
+        <p>
+          Your sneaker is temporarily
+          reserved.
+        </p>
+
+      </div>
+
+      <div
+        class="timer"
+        id="largeCountdown"
+      >
+        05:00
+      </div>
+
+    </section>
+
+
+    <!-- WAITLIST -->
+
+    <section
+      id="waitlistCard"
+      class="info-card waitlist hidden"
+    >
+
+      <div>
+
+        <span class="info-title">
+          You're on the waitlist
+        </span>
+
+        <p>
+          We'll automatically reserve
+          a pair for you when one
+          becomes available.
+        </p>
+
+      </div>
+
+      <strong
+        id="largeWaitlistPosition"
+      >
+        #-
+      </strong>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+      <p>
+        Sneaker Drop Demo · Backend
+        protected by PostgreSQL
+        transactions
+      </p>
+
+    </footer>
+
+  </main>
+
+
+  <script src="./app.js"></script>
+
+</body>
+</html>
